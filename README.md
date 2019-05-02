@@ -6,10 +6,10 @@ Sqlite dont have a propper "ALTER TABLE" syntax and can only append new column o
 
 So when i want to do migrations i need to write ugly and messy raw sql for the swapping meccanism of sqlite alter table.
 To change schema in sqlite you must:
-1 - Create a new table with the new schema
-2 - Copy the data from the old table to the new
-3 - Delete the old table
-4 - Rename the new table with the name of the old table
+1. Create a new table with the new schema
+2. Copy the data from the old table to the new
+3. Delete the old table
+4. Rename the new table with the name of the old table
 
 With this class you can simplify this process.
 It use the SupportSQLiteDatabase class to gather all the info about columns definiton, primary keys, relationships to determinate the schema.
