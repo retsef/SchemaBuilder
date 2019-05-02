@@ -1,5 +1,11 @@
 import androidx.sqlite.db.SupportSQLiteDatabase
 
+/**
+ * SchemaBuilder
+ * Android Sqlite schema migration tool
+ *
+ * @author "Roberto Scinocca <roberto.scinocca@gmail.com"
+ */
 class SchemaBuilder(private val db: SupportSQLiteDatabase, var table_name: String) {
     var schema: String = ""
     val columns: MutableList<Column> = mutableListOf()
@@ -12,16 +18,27 @@ class SchemaBuilder(private val db: SupportSQLiteDatabase, var table_name: Strin
         fetchRelations()
     }
 
+    /**
+     * Generate create schema
+     **/
     fun generateCreateSchema(_columns: List<Column> = columns, _relationships: List<Relation> = relationships): String {
         return "CREATE TABLE `$table_name` ${generateSchemaInfo(_columns, _relationships)}"
     }
 
+    /**
+     * Generate schema info
+     * example: (id INT, name TEXT, surname TEXT, person_id INT, ..., PRIMARY_KEY(`id`), FOREIGN KEY(`person_id`) REFERENCES `persons`(`id`))
+     **/
     fun generateSchemaInfo(_columns: List<Column> = columns, _relationships: List<Relation> = relationships): String {
         return "(${_columns.joinToString(", ")}, " +
                 "${columns.filter { it.pk == 1 }.map { it.foreignKeyString() }.joinToString(",")} " +
                 "${if(_relationships.isEmpty()) "" else ","} ${_relationships.joinToString(",")})"
     }
 
+    /**
+     * Generate column list
+     * example: id, name, surname, person_id
+     **/
     fun generateSchemaColumns(_columns: List<Column> = columns): String {
         return _columns.map { it.name }.joinToString(", ")
     }
